@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipselabs.collage.toolbar">
+      <contribution
+            class="org.eclipselabs.collage.draw.toolbar.LineWidthToolBarContribution"
+            name="Line width widget"
+            position="99">
+      </contribution>
+   </extension>
+   <extension
+         point="org.eclipselabs.collage.model">
+      <modelVersion
+            value="0.1.0">
+      </modelVersion>
+      <shape
+            controllerClass="org.eclipselabs.collage.draw.parts.DrawingShapeEditPart"
+            modelClass="org.eclipselabs.collage.draw.model.RectangularShape"
+            name="Rectangle"
+            treeControllerClass="org.eclipselabs.collage.colourpicker.parts.tree.ColouredShapeTreeEditPart">
+      </shape>
+      <shape
+            controllerClass="org.eclipselabs.collage.draw.parts.DrawingShapeEditPart"
+            modelClass="org.eclipselabs.collage.draw.model.EllipticalShape"
+            name="Ellipse"
+            treeControllerClass="org.eclipselabs.collage.colourpicker.parts.tree.ColouredShapeTreeEditPart">
+      </shape>
+      <shape
+            controllerClass="org.eclipselabs.collage.draw.parts.DrawingShapeEditPart"
+            modelClass="org.eclipselabs.collage.draw.model.FreehandSketchShape"
+            name="Freehand Sketch"
+            treeControllerClass="org.eclipselabs.collage.colourpicker.parts.tree.ColouredShapeTreeEditPart">
+      </shape>
+   </extension>
+   <extension
+         point="org.eclipselabs.collage.tools">
+      <tool
+            class="org.eclipselabs.collage.draw.tools.RectangleShapeCreationTool"
+            icon="icons/rectangle.png"
+            name="Add a rectangle">
+      </tool>
+      <tool
+            class="org.eclipselabs.collage.draw.tools.EllipticalShapeCreationTool"
+            icon="icons/ellipse.png"
+            name="Add an ellipse">
+      </tool>
+      <tool
+            class="org.eclipselabs.collage.draw.tools.FreehandSketchTool"
+            icon="icons/pencil.png"
+            name="Draw freehand sketches">
+      </tool>
+   </extension>
+
+</plugin>

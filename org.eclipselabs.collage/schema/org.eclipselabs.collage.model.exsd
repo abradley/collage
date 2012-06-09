@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipselabs.collage" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipselabs.collage" id="model" name="Collage Model"/>
+      </appinfo>
+      <documentation>
+         This extension point can be used to make contributions to the Collage GEF model. Model elements thus contributed will be automatically serialized to XML using JAXB when Collage saves or exports model layers.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="modelVersion"/>
+            <element ref="shape" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="shape">
+      <annotation>
+         <documentation>
+            A shape to be added to Collage&apos;s GEF model. The shape is specified by a model class, a controller (edit part) class, and an optional tree controller (tree edit part) class.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  Name of the shape.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="modelClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Model class for the shape.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipselabs.collage.model.Shape:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="controllerClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Controller (edit part) for the shape&apos;s presentation in the editor.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.gef.EditPart"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="treeControllerClass" type="string">
+            <annotation>
+               <documentation>
+                  Controller (tree edit part) for the shape&apos;s presentation in the &quot;Collage Layers&quot; tree.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.gef.TreeEditPart"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="modelVersion">
+      <annotation>
+         <documentation>
+            Current version of this plugin&apos;s model contributions. This version is not necessarily the same as the current version of the plugin, and should only be updated when the model actually changes.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="value" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Must be a valid OSGi Version. For example, &quot;0.1.0&quot; or &quot;1.0&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.1.0
+      </documentation>
+   </annotation>
+
+
+
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright &amp;copy; 2012 Alex Bradley.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+&lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+      </documentation>
+   </annotation>
+
+</schema>

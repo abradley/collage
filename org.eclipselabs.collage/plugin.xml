@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="toolbar" name="Collage Toolbar Widgets" schema="schema/org.eclipselabs.collage.toolbar.exsd"/>
+   <extension-point id="model" name="Collage Model" schema="schema/org.eclipselabs.collage.model.exsd"/>
+   <extension-point id="tools" name="Collage GEF Tools" schema="schema/org.eclipselabs.collage.tools.exsd"/>
+   <extension
+         point="org.eclipse.ui.workbench.texteditor.rulerColumns">
+      <column
+            class="org.eclipselabs.collage.rulers.CollageRulerColumn"
+            enabled="true"
+            global="true"
+            id="org.eclipselabs.collage.column1"
+            includeInMenu="true"
+            name="Collage">
+         <placement
+               gravity="1.0">
+         </placement>
+         <targetClass
+               class="org.eclipse.ui.texteditor.AbstractDecoratedTextEditor">
+         </targetClass>
+      </column>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.eclipselabs.collage.category"
+            class="org.eclipselabs.collage.ui.CollageLayersTreeView"
+            icon="icons/layersview.png"
+            id="org.eclipselabs.collage.collageLayers"
+            name="Collage Layers"
+            restorable="true">
+      </view>
+      <category
+            id="org.eclipselabs.collage.category"
+            name="Collage">
+      </category>
+   </extension>
+
+</plugin>

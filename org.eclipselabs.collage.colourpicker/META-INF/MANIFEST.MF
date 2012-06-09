@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Colour Picker for Collage
+Bundle-SymbolicName: org.eclipselabs.collage.colourpicker;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Alex Bradley
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipselabs.collage;bundle-version="0.1.0",
+ org.eclipse.gef;bundle-version="3.7.0",
+ org.eclipse.ui.views
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.eclipselabs.collage.colourpicker,
+ org.eclipselabs.collage.colourpicker.model,
+ org.eclipselabs.collage.colourpicker.parts.tree,
+ org.eclipselabs.collage.colourpicker.tools

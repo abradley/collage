@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Collage Framework
+Bundle-SymbolicName: org.eclipselabs.collage;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: org.eclipselabs.collage.CollageActivator
+Bundle-Vendor: Alex Bradley
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jface.text,
+ org.eclipse.gef,
+ org.eclipse.ui.views,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipselabs.collage,
+ org.eclipselabs.collage.model,
+ org.eclipselabs.collage.parts,
+ org.eclipselabs.collage.parts.tree,
+ org.eclipselabs.collage.requests,
+ org.eclipselabs.collage.tools,
+ org.eclipselabs.collage.ui,
+ org.eclipselabs.collage.util

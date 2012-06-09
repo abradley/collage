@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipselabs.collage.model">
+      <modelVersion
+            value="0.1.0">
+      </modelVersion>
+      <shape
+            controllerClass="org.eclipselabs.collage.text.parts.TextNoteEditPart"
+            modelClass="org.eclipselabs.collage.text.model.TextNoteShape"
+            name="Text"
+            treeControllerClass="org.eclipselabs.collage.colourpicker.parts.tree.ColouredShapeTreeEditPart">
+      </shape>
+   </extension>
+   <extension
+         point="org.eclipselabs.collage.tools">
+      <tool
+            class="org.eclipselabs.collage.text.tools.TextShapeCreationTool"
+            icon="icons/text.gif"
+            name="Add a text note">
+      </tool>
+   </extension>
+
+</plugin>

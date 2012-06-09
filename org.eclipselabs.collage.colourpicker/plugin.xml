@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipselabs.collage.toolbar">
+      <contribution
+            class="org.eclipselabs.collage.colourpicker.toolbar.ColourPickerToolBarContributor"
+            name="Colour picker"
+            position="90">
+      </contribution>
+   </extension>
+
+</plugin>

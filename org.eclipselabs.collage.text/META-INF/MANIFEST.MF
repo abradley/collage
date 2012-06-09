@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Collage text box extension
+Bundle-SymbolicName: org.eclipselabs.collage.text;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Alex Bradley
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipselabs.collage;bundle-version="0.1.0",
+ org.eclipse.gef,
+ org.eclipse.ui.views,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipselabs.collage.colourpicker;bundle-version="0.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
