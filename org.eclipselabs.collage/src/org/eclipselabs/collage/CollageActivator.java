@@ -230,7 +230,9 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 		case UNAVAILABLE:
 			showStorageUnavailableError();
 			break;
-	    // if BLANK, no action needed
+		case BLANK:
+			// No action needed
+			break;
 		case HAS_DATA:
 			File loadFile = getStateLocation().append(COLLAGE_STORAGE_FILE).toFile();
 			try {
