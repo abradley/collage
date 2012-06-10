@@ -514,6 +514,8 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 		synchronized (editingModeChangeLock) {
 			boolean currentlyEnabled = editingEnabled();
 			if (!currentlyEnabled && enabled) {
+				setProperty(EDIT_ENABLED_PROPERTY_ID, enabled);
+				
 				textWidget.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 
 				// This disables all underlying editor actions. Not using for now as it would seem useful
@@ -549,8 +551,6 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(this);
 				
 				reactivateEditorPartForProperties();
-				
-				setProperty(EDIT_ENABLED_PROPERTY_ID, enabled);
 			} else if (currentlyEnabled && !enabled) {
 				// Must fire this first - edit parts may need to listen and do cleanup
 				setProperty(EDIT_ENABLED_PROPERTY_ID, enabled);
@@ -618,9 +618,9 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 			boolean changed = false;
 			for (String actionId : UNDO_REDO_IDS) {
 				IAction action = getEditor().getAction(actionId);
-				if (actionBars.getGlobalActionHandler(action.getId()) != action) {
-					savedPropertiesGlobalActions.put(action.getId(), actionBars.getGlobalActionHandler(action.getId()));
-					actionBars.setGlobalActionHandler(action.getId(), action);
+				if (actionBars.getGlobalActionHandler(actionId) != action) {
+					savedPropertiesGlobalActions.put(actionId, actionBars.getGlobalActionHandler(actionId));
+					actionBars.setGlobalActionHandler(actionId, action);
 					changed = true;
 				}
 			}
@@ -635,8 +635,8 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 			boolean changed = false;
 			for (String actionId : UNDO_REDO_IDS) {
 				IAction action = getEditor().getAction(actionId);
-				if (actionBars.getGlobalActionHandler(action.getId()) == action) {
-					actionBars.setGlobalActionHandler(action.getId(), savedPropertiesGlobalActions.get(action.getId()));
+				if (actionBars.getGlobalActionHandler(actionId) == action) {
+					actionBars.setGlobalActionHandler(actionId, savedPropertiesGlobalActions.get(actionId));
 					changed = true;
 				}
 			}
