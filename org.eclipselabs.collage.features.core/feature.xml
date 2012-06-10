@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipselabs.collage.features.core"
-      label="Collage Core Framework"
+      label="Collage Framework Core"
       version="0.1.0.qualifier"
       provider-name="Alex Bradley">
 
    <description>
-      Collage framework core.
+      The Collage framework adds editable GEF graphical layers to Eclipse code editors. This feature provides the framework core. Collage extensions provide GEF model elements and tools that can be used to create and manipulate graphical objects in the Collage layers. It is recommended to install at least one Collage extension (e.g., the Code Markup Tools).
    </description>
 
    <copyright>
-      &lt;p&gt;
-Copyright &amp;copy; 2011, 2012 Alex Bradley, except as otherwise specified in source code files.
+      Copyright (c) 2011, 2012 Alex Bradley, except as otherwise
+specified in source code files.
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License
 v1.0 which accompanies this distribution, and is available at
-&lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.&lt;/p&gt;
+http://www.eclipse.org/legal/epl-v10.html.
 
-&lt;p&gt;
-Some icons (layers view, layer visibility/eye) by &lt;a href=&quot;http://p.yusukekamiyamane.com/&quot;&gt;Yusuke
-Kamiyamane&lt;/a&gt;. All rights reserved. Licensed under a &lt;a href=&quot;http://creativecommons.org/licenses/by/3.0/&quot;&gt;Creative
-Commons Attribution 3.0 License&lt;/a&gt;.&lt;/p&gt;
+Some icons (layers view, layer visibility/eye) by Yusuke
+Kamiyamane (http://p.yusukekamiyamane.com/). All rights reserved. Licensed under a Creative Commons Attribution 3.0 License.
 
-&lt;p&gt;
 All other icons are existing Eclipse icons obtained under the
-EPL.&lt;/p&gt;
+EPL.
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">

@@ -6,22 +6,21 @@
       provider-name="Alex Bradley">
 
    <description>
-      Collage code markup tools - basic shapes, freehand sketches, text notes.
+      Collage extension providing code markup tools: basic shapes, freehand sketches, and text notes.
    </description>
 
    <copyright url="http://www.eclipse.org/legal/epl-v10.html">
-      &lt;p&gt;
-Copyright &amp;copy; 2012 Alex Bradley, except as otherwise specified in source code files.
+      Copyright (c) 2011, 2012 Alex Bradley, except as otherwise
+specified in source code files.
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License
-v1.0
-which accompanies this distribution, and is available at
-&lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Pencil icon by &lt;a href=&quot;http://p.yusukekamiyamane.com/&quot;&gt;Yusuke
-Kamiyamane&lt;/a&gt;. All rights reserved. Licensed under a &lt;a href=&quot;http://creativecommons.org/licenses/by/3.0/&quot;&gt;Creative
-Commons Attribution 3.0 License&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;All other icons are existing Eclipse icons obtained under the
-EPL.&lt;/p&gt;
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html.
+
+Pencil icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/). All rights reserved. Licensed under a Creative Commons Attribution 3.0 License.
+
+All other icons are existing Eclipse icons obtained under the
+EPL.
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
