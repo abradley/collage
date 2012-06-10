@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Collage Update Site" url="http://www.cs.ubc.ca/~awjb/collage/">
+   <description name="Collage Update Site" url="http://collage.eclipselabs.org.codespot.com/git/org.eclipselabs.collage.updatesite/">
       Collage framework and tools.
    </description>
-   <feature url="features/org.eclipselabs.collage.features.core_0.1.0.qualifier.jar" id="org.eclipselabs.collage.features.core" version="0.1.0.qualifier">
+   <feature url="features/org.eclipselabs.collage.features.core_0.1.0.201206092310.jar" id="org.eclipselabs.collage.features.core" version="0.1.0.201206092310">
       <category name="collage"/>
    </feature>
-   <feature url="features/org.eclipselabs.collage.features.markup_0.1.0.qualifier.jar" id="org.eclipselabs.collage.features.markup" version="0.1.0.qualifier">
+   <feature url="features/org.eclipselabs.collage.features.markup_0.1.0.201206092310.jar" id="org.eclipselabs.collage.features.markup" version="0.1.0.201206092310">
       <category name="collage"/>
    </feature>
    <category-def name="collage" label="Collage">
