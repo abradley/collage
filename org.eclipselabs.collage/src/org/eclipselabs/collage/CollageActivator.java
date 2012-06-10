@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -54,9 +53,8 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 	public static final String PLUGIN_ID = "org.eclipselabs.collage"; //$NON-NLS-1$
 	public static final String PLUGIN_NAME = "Collage";
 
-	// Persistent storage location
-	public static final String COLLAGE_DIR = ".collage/";
-	public static final String COLLAGE_STORAGE_FILE = COLLAGE_DIR + "collage-storage.xml.gz";
+	// Persistent storage file
+	public static final String COLLAGE_STORAGE_FILE = "collage-storage.xml.gz";
 
 	// Save error messages
 	private static final String SAVE_FAILURE_STOP_SHUTDOWN_QUESTION = "Saving Collage data to %s was unsuccessful because %s. Would you like to stop the Eclipse shutdown and try to fix the problem?";
@@ -186,7 +184,7 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 	
 	@Override
 	public boolean preShutdown(IWorkbench workbench, boolean forced) {
-		final File saveFile = getWorkspaceFile(COLLAGE_STORAGE_FILE);
+		final File saveFile = getStateLocation().append(COLLAGE_STORAGE_FILE).toFile();
 		String path = saveFile.getAbsolutePath();
 		if (collageStorageAvailable() == CollageStorageState.UNAVAILABLE) {
 			return shouldShutdownProceed(path, "the file was not accessible", forced);
@@ -234,7 +232,7 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 			break;
 	    // if BLANK, no action needed
 		case HAS_DATA:
-			File loadFile = getWorkspaceFile(COLLAGE_STORAGE_FILE);
+			File loadFile = getStateLocation().append(COLLAGE_STORAGE_FILE).toFile();
 			try {
 				IJobManager manager = Job.getJobManager();
 				ISchedulingRule rule = new FilesystemSchedulingRule(loadFile);
@@ -257,7 +255,7 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 									CollageUtilities.join(warnings, "\n")));
 				}
 			} catch (Exception e) {
-				File backupTarget = getWorkspaceFile(getBackupFileName());
+				File backupTarget = getStateLocation().append(getBackupFileName()).toFile();
 				try {
 					CollageUtilities.fileCopy(loadFile, backupTarget);
 					CollageUtilities.showError(PLUGIN_NAME, 
@@ -291,20 +289,9 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 		}
 	}
 
-	private static File getWorkspaceFile (String workspacePath) {
-		return ResourcesPlugin.getWorkspace().getRoot().getLocation().append(workspacePath).toFile();
-	}
-	
-	private static CollageStorageState collageStorageAvailable () {
+	private CollageStorageState collageStorageAvailable () {
 		try {
-			File collageDir = getWorkspaceFile(COLLAGE_DIR);
-			if (!collageDir.exists()) {
-				if (!collageDir.mkdir()) {
-					return CollageStorageState.UNAVAILABLE;
-				}
-			}
-			
-			File collageFile = getWorkspaceFile(COLLAGE_STORAGE_FILE);
+			File collageFile = getStateLocation().append(COLLAGE_STORAGE_FILE).toFile();
 			CollageStorageState existsValue = CollageStorageState.HAS_DATA;
 			if (!collageFile.exists()) {
 				collageFile.createNewFile();
@@ -327,6 +314,6 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 	}
 
 	private static String getBackupFileName () {
-		return COLLAGE_DIR + "collage-backup-" + System.currentTimeMillis() + ".xml.gz";
+		return "collage-backup-" + System.currentTimeMillis() + ".xml.gz";
 	}
 }
