@@ -63,6 +63,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -214,7 +215,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 
 		// The next two calls may have already been done in setEditingMode(false), but we want to ensure
 		// they happen even if the text widget is already disposed.
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().removePartListener(this);
+		setPartListening(false);
 		uninstallAllActions();
 		
 		if (viewer != null) {
@@ -231,7 +232,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 			}
 		}
 	}
-	
+
 	public Object getProperty (String key) {
 		synchronized (propertiesLock) {
 			return properties.get(key);
@@ -570,7 +571,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				
 				viewer.addSelectionChangedListener(this);
 
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(this);
+				setPartListening(true);
 				
 				reactivateEditorPartForProperties();
 			} else if (currentlyEnabled && !enabled) {
@@ -583,7 +584,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				
 				this.getEditor().getSite().setSelectionProvider(savedSelectionProvider);
 				
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().removePartListener(this);
+				setPartListening(false);
 
 				viewer.deselectAll();
 				viewer.removeSelectionChangedListener(this);
@@ -599,6 +600,17 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 		}
 	}
 
+	private void setPartListening (boolean enabled) {
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			if (enabled) {
+				activeWorkbenchWindow.getPartService().addPartListener(this);
+			} else {
+				activeWorkbenchWindow.getPartService().removePartListener(this);
+			}
+		}
+	}
+	
 	/**
 	 * This is slightly kludgy.
 	 * 
@@ -609,12 +621,15 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	 * activated part.)
 	 */
 	private void reactivateEditorPartForProperties() {
-		for (IWorkbenchPage page : PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPages()) {
-			for (IViewReference ref : page.getViewReferences()) {
-				if (PROPERTIES_VIEW_ID.equals(ref.getId())) {
-					page.activate(ref.getPart(false));
-					page.activate(getEditor());
-					return;
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			for (IWorkbenchPage page : activeWorkbenchWindow.getPages()) {
+				for (IViewReference ref : page.getViewReferences()) {
+					if (PROPERTIES_VIEW_ID.equals(ref.getId())) {
+						page.activate(ref.getPart(false));
+						page.activate(getEditor());
+						return;
+					}
 				}
 			}
 		}
