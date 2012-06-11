@@ -12,6 +12,7 @@ package org.eclipselabs.collage.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle.Control;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.commands.Command;
@@ -260,7 +261,13 @@ public final class EditorActionManager {
 		@Override
 		public boolean canExecute() {
 			// The second check tries to avoid using the editor when disposed.
-			return textEditor != null && textEditor.getDocumentProvider() != null;
+			return textEditor != null && textEditor.getAdapter(Control.class) != null;
+		}
+
+		@Override
+		public boolean canUndo() {
+			// The second check tries to avoid using the editor when disposed.
+			return textEditor != null && textEditor.getAdapter(Control.class) != null;
 		}
 
 		@Override

@@ -23,6 +23,8 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.ISafeRunnable;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.gef.SharedImages;
 import org.eclipse.gef.Tool;
@@ -125,6 +127,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	
 	private List<IAction> selectionActions = new ArrayList<IAction> (3);	
 	private List<IAction> otherActions = new ArrayList<IAction> (3);	
+	private Map<String, IAction> installedPropertiesGlobalActions = new HashMap<String, IAction>();
 	private Map<String, IAction> savedPropertiesGlobalActions = new HashMap<String, IAction>();
 	private PropertySheet activePropertySheet = null;
 	private boolean shouldHandlePropertiesUndoRedo = true;
@@ -197,13 +200,23 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	}
 	
 	public void uninstall() {
-		if (toolbar != null)
+		if (viewer != null && textWidget != null && !textWidget.isDisposed()) {
+			setEditingMode(false);
+		}
+		
+		if (toolbar != null) {
 			toolbar.dispose();
+		}
 		
 		setProperty(TOOLBAR_DISPOSED_PROPERTY_ID, true);
 
 		CollageUIRegistry.getDefault().removeCollageUI(this);
 
+		// The next two calls may have already been done in setEditingMode(false), but we want to ensure
+		// they happen even if the text widget is already disposed.
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().removePartListener(this);
+		uninstallAllActions();
+		
 		if (viewer != null) {
 			Control viewerControl = viewer.getControl();
 			
@@ -213,8 +226,6 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 			viewer.setControl(null);
 			
 			if (textWidget != null && !textWidget.isDisposed()) {
-				setEditingMode(false);
-				
 				getTopParent().layout();
 				textWidget.redraw();
 			}
@@ -227,10 +238,19 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 		}
 	}
 	
-	public void setProperty (String key, Object value) {
+	public void setProperty (final String key, final Object value) {
 		synchronized (propertiesLock) {
-			Object oldValue = properties.put(key, value);
-			pcsDelegate.firePropertyChange(key, oldValue, value);
+			final Object oldValue = properties.put(key, value);
+			SafeRunner.run(new ISafeRunnable() {
+				@Override
+				public void run() throws Exception {
+					pcsDelegate.firePropertyChange(key, oldValue, value);
+				}
+				
+				@Override
+				public void handleException(Throwable exception) {
+				}
+			});
 		}
 	}
 	
@@ -468,13 +488,15 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 		synchronized (registeredToolsLock) {
 			for (Entry<Class<? extends Tool>, ToolItem> entry : registeredTools.entrySet()) {
 				ToolItem button = entry.getValue();
-				if (entry.getKey().equals(toolClass)) {
-					if (!button.getSelection()) {
-						button.setSelection(true);
-					}
-				} else {
-					if (button.getSelection()) {
-						button.setSelection(false);
+				if (button != null && !button.isDisposed()) {
+					if (entry.getKey().equals(toolClass)) {
+						if (!button.getSelection()) {
+							button.setSelection(true);
+						}
+					} else {
+						if (button.getSelection()) {
+							button.setSelection(false);
+						}
 					}
 				}
 			}
@@ -621,6 +643,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				if (actionBars.getGlobalActionHandler(actionId) != action) {
 					savedPropertiesGlobalActions.put(actionId, actionBars.getGlobalActionHandler(actionId));
 					actionBars.setGlobalActionHandler(actionId, action);
+					installedPropertiesGlobalActions.put(actionId, action);
 					changed = true;
 				}
 			}
@@ -634,9 +657,10 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 			IActionBars actionBars = activePropertySheet.getViewSite().getActionBars();
 			boolean changed = false;
 			for (String actionId : UNDO_REDO_IDS) {
-				IAction action = getEditor().getAction(actionId);
+				IAction action = installedPropertiesGlobalActions.get(actionId);
 				if (actionBars.getGlobalActionHandler(actionId) == action) {
 					actionBars.setGlobalActionHandler(actionId, savedPropertiesGlobalActions.get(actionId));
+					installedPropertiesGlobalActions.remove(actionId);
 					changed = true;
 				}
 			}
