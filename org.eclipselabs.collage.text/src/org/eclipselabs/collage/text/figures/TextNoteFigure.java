@@ -68,7 +68,7 @@ public class TextNoteFigure extends RoundedRectangle {
 		topLabel.setFont(CollageUtilities.getFontRegistry().getBoldSystemFontAtSize(8));
 		
 		textFlow = new TextFlow();
-		textFlow.setForegroundColor(ColorConstants.tooltipForeground);
+		textFlow.setForegroundColor(ColorConstants.black);
 
 		textFlow.setLayoutManager(new ParagraphTextLayout(textFlow,
 				ParagraphTextLayout.WORD_WRAP_SOFT));
