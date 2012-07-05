@@ -297,13 +297,6 @@ public abstract class Shape extends ModelElement {
 		return bounds.getDescription();
 	}
 
-	public final boolean inActiveLayer () {
-		if (getParent() != null) {
-			return ((CollageLayer)getParent().getParent()).isActiveLayer();
-		}
-		return true; // being created, so must be in active layer
-	}
-	
 	public final boolean isCreated() {
 		return created;
 	}
