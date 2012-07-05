@@ -33,7 +33,7 @@ import org.eclipselabs.collage.xml.adapters.ResourceShapeListMapAdapter;
  */
 @XmlType(name="layer")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CollageLayer extends ModelElement {
+public class CollageLayer extends UserCreatableModelElement {
 	@XmlAttribute
 	private String name;
 	

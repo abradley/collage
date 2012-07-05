@@ -46,7 +46,7 @@ import org.eclipselabs.collage.util.CollageUtilities;
  */
 @XmlTransient
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class Shape extends ModelElement {
+public abstract class Shape extends UserCreatableModelElement {
 	public static final String CATEGORY_LOCATION_SIZE = "Location & Size";
 	public static final String CATEGORY_APPEARANCE = "Appearance";
 	public static final String CATEGORY_METADATA = "Metadata";	
@@ -120,11 +120,6 @@ public abstract class Shape extends ModelElement {
 	/** Creator of this shape. */
 	@XmlAttribute
 	private String creator = System.getProperty("user.name", "(unknown)");
-
-	/** Has this shape been created? (Used for restricting commands.) */
-	private transient boolean created = true;
-	/** Has this shape been deleted? (Used for restricting commands.) */
-	private transient boolean deleted = false;
 	
 	/**
 	 * Return a pictogram (small icon) describing this model element. Children
@@ -259,7 +254,18 @@ public abstract class Shape extends ModelElement {
 	public final Date getModificationDate () {
 		return (Date)dateLastModified.clone();
 	}
-	
+
+	/**
+	 * Returns true iff the parent layer has been created and has not been deleted.
+	 */
+	public final boolean parentLayerExists () {
+		if (getParent() != null) {
+			CollageLayer layer = (CollageLayer)getParent().getParent();
+			return layer != null && layer.isCreated() && !layer.isDeleted();
+		}
+		return true; // being created, so must be in active layer
+	}
+
 	/**
 	 * Set the property value for the given property id. If no matching id is
 	 * found, the call is forwarded to the superclass.
@@ -295,21 +301,5 @@ public abstract class Shape extends ModelElement {
 	 */
 	protected String getShapeBoundariesDescription () {
 		return bounds.getDescription();
-	}
-
-	public final boolean isCreated() {
-		return created;
-	}
-
-	public final void setCreated(boolean created) {
-		this.created = created;
-	}
-
-	public final boolean isDeleted() {
-		return deleted;
-	}
-
-	public final void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 }

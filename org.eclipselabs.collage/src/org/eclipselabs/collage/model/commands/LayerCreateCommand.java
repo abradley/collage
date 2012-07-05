@@ -33,26 +33,29 @@ public class LayerCreateCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return parent != null;
+		return parent != null && (layer == null || (!layer.isCreated() && !layer.isDeleted()));
 	}
 
 	@Override
 	public boolean canUndo() {
-		return (layer != null && parent.getNumLayers() > 1);
+		return layer != null && parent.getNumLayers() > 1 && layer.isCreated() && !layer.isDeleted();
 	}
 
 	@Override
 	public void execute() {
 		layer = parent.addLayer();
+		layer.setCreated(true);
 	}
 
 	@Override
 	public void redo() {
 		parent.addLayer(layer);
+		layer.setCreated(true);
 	}
 
 	@Override
 	public void undo() {
 		parent.removeLayer(layer);
+		layer.setCreated(false);
 	}
 }

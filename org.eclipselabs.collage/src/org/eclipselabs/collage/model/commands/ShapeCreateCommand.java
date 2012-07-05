@@ -59,12 +59,12 @@ public class ShapeCreateCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return newShape != null && parent != null && bounds != null && !newShape.isCreated() && !newShape.isDeleted();
+		return newShape != null && parent != null && bounds != null && !newShape.isCreated() && !newShape.isDeleted() && newShape.parentLayerExists();
 	}
 
 	@Override
 	public boolean canUndo() {
-		return newShape.isCreated() && !newShape.isDeleted() && bounds.equals(newShape.getBoundaries());
+		return newShape.isCreated() && !newShape.isDeleted() && bounds.equals(newShape.getBoundaries()) && newShape.parentLayerExists();
 	}
 
 	@Override

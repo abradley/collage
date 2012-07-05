@@ -62,7 +62,7 @@ public class ShapeSetConstraintCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (shape != null && shape.isCreated() && !shape.isDeleted()) {
+		if (shape != null && shape.isCreated() && !shape.isDeleted() && shape.parentLayerExists()) {
 			if (oldBounds != null && !shape.getBoundaries().equals(oldBounds)) {
 				return false;
 			}
@@ -79,7 +79,7 @@ public class ShapeSetConstraintCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return shape.isCreated() && !shape.isDeleted() && shape.getBoundaries().equals(newBounds);
+		return shape.isCreated() && !shape.isDeleted() && shape.parentLayerExists() && shape.getBoundaries().equals(newBounds);
 	}
 
 	@Override

@@ -54,12 +54,12 @@ public class LayerDeleteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return parent.getNumLayers() > 1 && !child.isActiveLayer();
+		return parent.getNumLayers() > 1 && !child.isActiveLayer() && child.isCreated() && !child.isDeleted();
 	}
 
 	@Override
 	public boolean canUndo() {
-		return removedIndex != -1;
+		return removedIndex != -1 && child.isCreated() && child.isDeleted();
 	}
 
 	@Override
@@ -71,11 +71,13 @@ public class LayerDeleteCommand extends Command {
 	public void redo() {
 		// remove the child
 		removedIndex = parent.removeLayer(child);
+		child.setDeleted(true);
 	}
 	
 	@Override
 	public void undo() {
 		// add the child
 		parent.addLayer(removedIndex, child);
+		child.setDeleted(false);
 	}
 }

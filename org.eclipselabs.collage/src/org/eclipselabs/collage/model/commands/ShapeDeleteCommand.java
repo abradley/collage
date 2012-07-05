@@ -50,12 +50,12 @@ public class ShapeDeleteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return child.isCreated() && !child.isDeleted();
+		return child.isCreated() && !child.isDeleted() && child.parentLayerExists();
 	}
 
 	@Override
 	public boolean canUndo() {
-		return child.isCreated() && child.isDeleted();
+		return child.isCreated() && child.isDeleted() && child.parentLayerExists();
 	}
 
 	@Override
