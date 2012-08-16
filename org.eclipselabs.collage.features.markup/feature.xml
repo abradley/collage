@@ -2,7 +2,7 @@
 <feature
       id="org.eclipselabs.collage.features.markup"
       label="Collage Code Markup Tools"
-      version="0.1.0.qualifier"
+      version="0.1.1.qualifier"
       provider-name="Alex Bradley">
 
    <description>
