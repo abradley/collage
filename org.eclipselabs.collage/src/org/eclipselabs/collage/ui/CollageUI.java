@@ -37,9 +37,11 @@ import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
@@ -131,7 +133,7 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	private Map<String, IAction> installedPropertiesGlobalActions = new HashMap<String, IAction>();
 	private Map<String, IAction> savedPropertiesGlobalActions = new HashMap<String, IAction>();
 	private PropertySheet activePropertySheet = null;
-	private boolean shouldHandlePropertiesUndoRedo = true;
+	private boolean isPropertySheetSelectionSource = true;
 	
 	private HashMap<Integer, Listener[]> savedListenersMap = new HashMap<Integer, Listener[]>();
 	private ISelectionProvider savedSelectionProvider = null;
@@ -317,7 +319,12 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		updateActions(selectionActions);		
+		updateActions(selectionActions);
+		
+		// Update properties view manually if present. Setting the GEF viewer
+		// as the selection provider isn't always sufficient for the properties
+		// view to pick up changes.
+		refreshPropertiesView(event.getSelection());
 	}
 
 	public void updateUndoRedo () { 
@@ -331,14 +338,37 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	public void partActivated(IWorkbenchPart part) {
 		if (part instanceof PropertySheet) {
 			activePropertySheet = (PropertySheet)part;
-			if (shouldHandlePropertiesUndoRedo) {
+			if (isPropertySheetSelectionSource) {
 				installPropertySheetActions();
+				
+				// Under Indigo, GEF selection may not be picked up when Properties
+				// view is first opened
+				ISelection selection = viewer.getSelection();
+				if (selection != null) {
+					activePropertySheet.selectionChanged(getEditor(), selection);
+				}
 			}
 		} else if (part == getEditor()) {
-			shouldHandlePropertiesUndoRedo = true;
+			isPropertySheetSelectionSource = true;
 			installPropertySheetActions();
+
+			// Defer update of the selection until after all partActivated listeners have fired.
+			// This listener might end up running before the properties view's own activation
+			// listener; if so, the properties view wouldn't have updated its record of the 
+			// active part at this point and therefore wouldn't accept a selection update.
+			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if (viewer != null) {
+						ISelection selection = viewer.getSelection();
+						if (selection != null) {
+							refreshPropertiesView(selection);
+						}
+					}
+				}
+			}); 
 		} else {
-			shouldHandlePropertiesUndoRedo = false;
+			isPropertySheetSelectionSource = false;
 			uninstallPropertySheetActions();
 			activePropertySheet = null;
 		}
@@ -346,7 +376,16 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 
 	@Override public void partBroughtToTop(IWorkbenchPart part) { }
 	@Override public void partClosed(IWorkbenchPart part) { }
-	@Override public void partDeactivated(IWorkbenchPart part) { }
+	
+	@Override 
+	public void partDeactivated(IWorkbenchPart part) { 
+		if (part == getEditor()) {
+			refreshPropertiesView(StructuredSelection.EMPTY);
+		} else if (part instanceof PropertySheet) {
+			((PropertySheet)part).selectionChanged(getEditor(), StructuredSelection.EMPTY);
+		}
+	}
+	
 	@Override public void partOpened(IWorkbenchPart part) { }
 
 	@Override
@@ -572,8 +611,6 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				viewer.addSelectionChangedListener(this);
 
 				setPartListening(true);
-				
-				reactivateEditorPartForProperties();
 			} else if (currentlyEnabled && !enabled) {
 				// Must fire this first - edit parts may need to listen and do cleanup
 				setProperty(EDIT_ENABLED_PROPERTY_ID, enabled);
@@ -591,8 +628,6 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 				editDomain.setActiveTool(null);
 
 				uninstallAllActions();
-
-				reactivateEditorPartForProperties();
 
 				// This re-enables all editor actions (see above)
 				// getEditor().getEditorSite().getActionBarContributor().setActiveEditor(getEditor());
@@ -612,22 +647,19 @@ public class CollageUI implements CommandStackEventListener, ISelectionChangedLi
 	}
 	
 	/**
-	 * This is slightly kludgy.
-	 * 
-	 * If the properties view is present, reactivate the editor view so the properties view will pick up our
-	 * new selection provider (or a restored selection provider from elsewhere.) Reactivation is done by switching 
-	 * activation to the properties view and back to the editor. (We can't just call 
-	 * {@link IWorkbenchPage#activate(IWorkbenchPart)} on the editor because it won't reactivate the currently 
-	 * activated part.)
+	 * If a properties view is present, manually update it with a given selection.
+	 * @param sel Selection with which to update the properties view.
 	 */
-	private void reactivateEditorPartForProperties() {
+	private void refreshPropertiesView (ISelection sel) {
 		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null) {
 			for (IWorkbenchPage page : activeWorkbenchWindow.getPages()) {
 				for (IViewReference ref : page.getViewReferences()) {
 					if (PROPERTIES_VIEW_ID.equals(ref.getId())) {
-						page.activate(ref.getPart(false));
-						page.activate(getEditor());
+						IWorkbenchPart propertiesView = ref.getPart(false);
+						if (propertiesView != null && propertiesView instanceof PropertySheet) {
+							((PropertySheet)propertiesView).selectionChanged(getEditor(), sel);
+						}
 						return;
 					}
 				}
