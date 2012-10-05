@@ -84,7 +84,8 @@ public class CollageLayerTreeEditPart extends ColourFontTreeEditPart implements 
 
 	@Override
 	protected Image getImage() {
-		return getCastedModel().isVisible() ? CollageActivator.getImage(CollageActivator.LAYER_VISIBLE_ICON) : null;
+		return getCastedModel().isVisible() ? CollageActivator.getImage(CollageActivator.LAYER_VISIBLE_ICON) 
+				: CollageActivator.getImage(CollageActivator.BLANK_ICON);
 	}
 
 	@Override

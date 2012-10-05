@@ -61,6 +61,7 @@ public final class CollageActivator extends AbstractUIPlugin implements IWorkben
 	private static final String SAVE_FAILURE_FORCED_SHUTDOWN_ERROR = "Saving Collage data to %s was unsuccessful because %s. As this is a forced shutdown, Collage data may be lost.";
 
 	// Icons
+	public static final String BLANK_ICON = "icons/blank.gif";
 	public static final String UNKNOWN_SHAPE_ICON = "icons/unknown_shape.gif";
 	public static final String IBEAM_ICON = "icons/ibeam.png";
 	public static final String IMPORT_ICON = "icons/import.gif";
