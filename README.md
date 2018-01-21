@@ -24,7 +24,7 @@ The Collage framework and code markup tools can be installed from Eclipse Market
 
 They can also be installed from the following Eclipse update site:
 
-  http://collage.eclipselabs.org.codespot.com/git/updates-release/
+  https://abradley.github.io/collage/updates-release/
 
 Collage has been tested on Eclipse 3.7 (Indigo) and 4.2 (Juno) on Ubuntu Linux 12.04 and Windows 7; on Eclipse 4.2 on Mac OS X; on Eclipse 4.3 (Kepler) on Ubuntu Linux 12.04; and on Eclipse 4.4 (Luna) on Ubuntu Linux 14.04.
 
