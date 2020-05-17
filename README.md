@@ -28,4 +28,4 @@ They can also be installed from the following Eclipse update site:
 
 Collage has been tested on Eclipse 3.7 (Indigo) and 4.2 (Juno) on Ubuntu Linux 12.04 and Windows 7; on Eclipse 4.2 on Mac OS X; on Eclipse 4.3 (Kepler) on Ubuntu Linux 12.04; and on Eclipse 4.4 (Luna) on Ubuntu Linux 14.04.
 
-Collage is not currently under active development, but email feedback is welcome at `a.bradley at alumni dot cs dot ubc dot ca`.
+Collage is not currently under active development, but email feedback is welcome at `a.bradley at alumni dot ubc dot ca`.
