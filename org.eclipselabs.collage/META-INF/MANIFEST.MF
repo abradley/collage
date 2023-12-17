@@ -26,3 +26,6 @@ Export-Package: org.eclipselabs.collage,
  org.eclipselabs.collage.tools,
  org.eclipselabs.collage.ui,
  org.eclipselabs.collage.util
+Import-Package: javax.xml.bind;version="2.3.3",
+ javax.xml.bind.annotation;version="2.3.3",
+ javax.xml.bind.annotation.adapters;version="2.3.3"
