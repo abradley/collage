@@ -3,6 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Draw plugin for Collage
 Bundle-SymbolicName: org.eclipselabs.collage.draw;singleton:=true
 Bundle-Version: 0.1.1.qualifier
+Import-Package: javax.xml.bind;version="2.3.3",
+ javax.xml.bind.annotation;version="2.3.3",
+ javax.xml.bind.annotation.adapters;version="2.3.3"
 Bundle-Vendor: Alex Bradley
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipselabs.collage;bundle-version="0.1.0",
